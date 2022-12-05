@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div class="div_main">
+    <div class="header">
+        <h1>Text Analyzer</h1>
+    </div>
+    <div class="div_button">
+        <input type="button" class="button" id="btn1" value="Click to generate all the statements" onClick="getSolution()"></input>
+        <div>
+            <input type="number" id="input_id" placeholder="Enter statement number"/>
+            <input type="button" class="button" id="btn2" value="Click to analyse" onClick="getSolutionById()"/>
+        </div>
+    </div>
+    <div class="div_output">
+        <textarea id="output" rows="10" cols="80" style="resize:none;"></textarea>
+    </div>
+</div>
+
+<script>
+    const text1=document.getElementById('inputText');
+    const btn1=document.getElementById('btn1');
+    const btn2=document.getElementById('btn2');
+    const out1=document.getElementById('output');
+    const id=document.getElementById('input_id');
+
+    function getSolution()
+    {
+        const url="http://localhost:8090/";
+        const request=new XMLHttpRequest();
+        request.open("GET",url);
+        request.send();
+        request.onload=()=>
+        {
+            if(request.status===200)
+            {
+                out1.innerHTML=request.response
+            }
+            else
+            {
+                out1.innerHTML="error..!"
+            }
+        }
+    }
+
+    btn1.addEventListener('click',getSolution);
+
+
+    function getSolutionById()
+    {
+        const input_id=id.value;
+        const baseUrl="http://localhost:8090/";
+        const url=baseUrl.concat(input_id);
+        const request=new XMLHttpRequest();
+        request.open("GET",url);
+        request.send();
+        request.onload=()=>
+        {
+            if(request.status===200)
+            {
+                out1.innerHTML=request.response
+            }
+            else if(request.status===500)
+            {
+                out1.innerHTML="Make sure that input is in valid range"
+            }
+        }
+    }
+    btn2.addEventListener('click',getSolutionById);
+
+    </script>
+
+</body>
+</html>
